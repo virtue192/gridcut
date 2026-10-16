@@ -1,0 +1,13 @@
+{
+  "name": "gridcut",
+  "version": "1.0.0",
+  "private": true,
+  "description": "格切：零依赖、纯浏览器的多宫格图片切分工具",
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="格切：把多宫格图片切分成独立照片。支持自定义行列、PNG/JPG/WebP、ZIP打包，图片在浏览器本地处理。"
+    />
+    <title>格切 Gridcut · 多宫格图片切分</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <header>
+        <div class="brand">
+          <div class="mark" aria-hidden="true">
+            <i></i><i></i><i></i><i></i>
+          </div>
+          格切<small>GRIDCUT</small>
+        </div>
+        <div class="header-right">
+          <div class="private"><span></span>图片仅在本地处理</div>
+          <button class="linkbtn" id="helpBtn" aria-label="使用说明">
+            使用说明 ↗
+          </button>
+        </div>
+      </header>
+      <section class="intro">
+        <div>
+          <div class="eyebrow">A LITTLE TOOL, MORE POSSIBILITIES</div>
+          <h1>多宫格，<span>轻松拆开。</span></h1>
+          <p>上传一张拼图，让每一格成为独立的照片。</p>
+        </div>
+        <div class="steps">
+          <span><b>01</b>上传图片</span><em>／</em><span><b>02</b>设置宫格</span
+          ><em>／</em><span><b>03</b>打包下载</span>
+        </div>
+      </section>
+      <main class="workspace">
+        <aside class="settings" aria-label="切分设置">
+          <div class="upload-group">
+            <h2 class="section-label">选择图片 <small>01 / SOURCE</small></h2>
+            <button class="upload" id="uploadBtn">
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              >
+                <path
+                  d="M12 16V4m-4 4 4-4 4 4M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"
+                /></svg
+              ><strong>点击上传，或拖入图片</strong
+              ><small>PNG · JPG · WEBP · BMP · GIF（首帧）</small></button
+            ><input
+              type="file"
+              id="fileInput"
+              accept="image/png,image/jpeg,image/webp,image/bmp,image/gif"
+              hidden
+            />
+            <div class="source-info">
+              <span id="sourceName">加载几何示例…</span
+              ><span id="sourceSize"></span>
+            </div>
+          </div>
+          <div class="separator"></div>
+          <div class="setting-group">
+            <h2 class="section-label">设置宫格 <small>02 / GRID</small></h2>
+            <div class="presets">
+              <button class="preset" data-rows="2" data-cols="2">2 × 2</button
+              ><button class="preset" data-rows="3" data-cols="3">3 × 3</button
+              ><button class="preset active" data-rows="4" data-cols="4">
+                4 × 4</button
+              ><button class="preset" data-rows="2" data-cols="3">2 × 3</button>
+            </div>
+            <div class="dimensions">
+              <label for="rows"
+                >行数<input
+                  id="rows"
+                  type="number"
+                  min="1"
+                  max="30"
+                  value="4"
+                  inputmode="numeric" /></label
+              ><span class="times">×</span
+              ><label for="cols"
+                >列数<input
+                  id="cols"
+                  type="number"
+                  min="1"
+                  max="30"
+                  value="4"
+                  inputmode="numeric"
+              /></label>
+            </div>
+            <p class="hint" id="gridCount">共 16 张独立图片</p>
+          </div>
+          <div class="separator"></div>
+          <div class="setting-group export-group">
+            <h2 class="section-label">导出设置 <small>03 / EXPORT</small></h2>
+            <div class="formats" role="group" aria-label="导出格式">
+              <button
+                class="format active"
+                data-format="png"
+                aria-pressed="true"
+              >
+                PNG</button
+              ><button class="format" data-format="jpg" aria-pressed="false">
+                JPG</button
+              ><button class="format" data-format="webp" aria-pressed="false">
+                WEBP
+              </button>
+            </div>
+            <p class="hint" id="formatHint">无损画质 · 保留透明背景</p>
+            <label class="quality" id="qualityWrap" hidden
+              >质量<input
+                id="quality"
+                type="range"
+                min="50"
+                max="100"
+                value="95"
+              /><output id="qualityValue">95%</output></label
+            >
+            <details>
+              <summary>边距与命名</summary>
+              <div class="advanced">
+                <label
+                  >左右外边距 (px)<input
+                    id="marginX"
+                    type="number"
+                    value="0"
+                    min="0"
+                    max="10000" /></label
+                ><label
+                  >上下外边距 (px)<input
+                    id="marginY"
+                    type="number"
+                    value="0"
+                    min="0"
+                    max="10000" /></label
+                ><label
+                  >列间距 (px)<input
+                    id="gapX"
+                    type="number"
+                    value="0"
+                    min="0"
+                    max="10000" /></label
+                ><label
+                  >行间距 (px)<input
+                    id="gapY"
+                    type="number"
+                    value="0"
+                    min="0"
+                    max="10000" /></label
+                ><label class="full"
+                  >文件名前缀<input
+                    id="prefix"
+                    type="text"
+                    value="photo"
+                    maxlength="60"
+                    autocomplete="off"
+                /></label>
+              </div>
+            </details>
+          </div>
+          <div class="download-wrap">
+            <button class="download" id="downloadBtn" disabled>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+              >
+                <path d="M12 3v12m-4-4 4 4 4-4M4 16v4h16v-4" /></svg
+              ><span id="downloadText">切分并下载 ZIP</span>
+            </button>
+            <p class="download-note">一次下载全部图片，无需逐张保存</p>
+          </div>
+        </aside>
+        <section class="preview" aria-label="切分预览">
+          <div class="preview-head">
+            <div class="preview-title">
+              切分预览 <span class="tag" id="previewTag">4 × 4 宫格</span>
+            </div>
+            <div class="view-switch" role="group" aria-label="预览方式">
+              <button class="active" id="originalView" aria-pressed="true">
+                原图网格</button
+              ><button id="tilesView" aria-pressed="false">独立图片</button>
+            </div>
+          </div>
+          <div class="progress" id="progress"><i id="progressBar"></i></div>
+          <div class="canvas-area" id="dropArea">
+            <div class="image-wrap" id="imageWrap" hidden>
+              <img id="sourceImage" alt="待切分的原图" />
+              <div class="grid-overlay" id="gridOverlay"></div>
+            </div>
+            <div class="tile-view" id="tileView" hidden></div>
+            <div class="empty" id="empty">选择一张多宫格图片，开始切分</div>
+          </div>
+          <div class="preview-bottom">
+            <span id="cellSize">保留原始分辨率</span
+            ><label
+              ><input id="showNumbers" type="checkbox" checked />显示编号</label
+            ><strong id="outputCount">将生成 16 张图片</strong>
+          </div>
+        </section>
+      </main>
+      <div id="status" class="status" role="status" aria-live="polite"></div>
+      <div class="info-row">
+        <div class="info-items">
+          <span><i>◇</i>无需上传服务器</span><span><i>↗</i>保留原始分辨率</span
+          ><span><i>▦</i>自定义行列数</span>
+        </div>
+        <span>小提示：也可以直接粘贴剪贴板里的图片</span>
+      </div>
+      <footer>
+        <span>一张拼图，无限可能。</span
+        ><span>MADE FOR YOUR LITTLE MOMENTS</span>
+      </footer>
+    </div>
+    <dialog id="helpDialog">
+      <button class="close" data-close="helpDialog" aria-label="关闭说明">
+        ×
+      </button>
+      <h2>三步，把宫格拆开</h2>
+      <ol>
+        <li>点击上传、拖入，或粘贴一张图片。</li>
+        <li>设置实际行列数。4 行 × 4 列会得到 16 张照片。</li>
+        <li>选择 PNG、JPG 或 WebP，点击「切分并下载 ZIP」。</li>
+      </ol>
+      <p>在「独立图片」中点击任意一格，可放大查看并单张下载。</p>
+      <p>
+        如果拼图有外边框或格间留白，在「边距与命名」中填写对应像素。此工具按等分网格切图，不会自动识别不规则排版。
+      </p>
+      <p>
+        切分不缩放图片。不能整除的像素会分配到相邻格子，单格尺寸可能相差 1
+        像素。JPG 的透明区域会填充为白色，GIF 只处理第一帧。
+      </p>
+      <p>
+        图片在当前浏览器内处理；刷新页面后不会保留。离线版可直接双击 HTML 打开。
+      </p>
+    </dialog>
+    <dialog id="detailDialog">
+      <button class="close" data-close="detailDialog" aria-label="关闭图片">
+        ×
+      </button>
+      <h2 id="detailTitle">图片预览</h2>
+      <img id="detailImage" class="detail-image" alt="切分后的单张图片" />
+      <p id="detailSize"></p>
+      <button class="download" id="singleDownload">下载这张图片</button>
+    </dialog>
+    <script src="core.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
