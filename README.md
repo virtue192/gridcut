@@ -2,6 +2,8 @@
 
 把一张多宫格图片切成独立照片的轻量网页工具。纯 HTML、CSS 和 JavaScript，零运行时依赖，不需要 AI、API Key、账号或后端。
 
+**[在线使用](https://virtue192.github.io/gridcut/)** · [下载源码](https://github.com/virtue192/gridcut/archive/refs/heads/main.zip)
+
 ## 使用
 
 1. 下载本仓库，双击 `index.html` 打开；也可以使用 GitHub Pages 在线版。
